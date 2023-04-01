@@ -3,6 +3,7 @@ package ru.practicum.shareit.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.Collection;
 
@@ -18,11 +19,13 @@ public class UserController {
         log.info("POST-запрос на создание пользователя.");
         return userService.addUser(userDto);
     }
+
     @GetMapping("/{id}")
     public UserDto getUserByID(@PathVariable int id) {
         log.info("GET-запрос на вывод пользователя по идентификатору.");
         return userService.getById(id);
     }
+
     @GetMapping
     public Collection<UserDto> getAllUsers() {
         log.info("GET-запрос на вывод всех пользователей.");

@@ -54,7 +54,7 @@ public class UserService {
 
     void checkDuplicateEmail(User user) {
         if (userStorage.getAll().stream().anyMatch(u -> u.getEmail().equals(user.getEmail())
-        && u.getId() != user.getId())) {
+                && u.getId() != user.getId())) {
             throw new DuplicateEmailException("Пользователь с таким Email уже существует");
         }
     }

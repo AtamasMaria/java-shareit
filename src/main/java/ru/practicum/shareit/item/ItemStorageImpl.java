@@ -28,6 +28,7 @@ public class ItemStorageImpl implements ItemStorage {
                 .filter(item -> item.getOwner() == ownerId)
                 .collect(Collectors.toList());
     }
+
     @Override
     public Item update(Item item) {
         items.put(item.getId(), item);
