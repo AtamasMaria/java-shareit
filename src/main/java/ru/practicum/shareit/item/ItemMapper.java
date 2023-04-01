@@ -10,7 +10,6 @@ public class ItemMapper {
                 .request(item.getRequest() != 0 ? item.getRequest() : 0)
                 .build();
     }
-
     public static Item toItem(ItemDto itemDto) {
         return Item.builder()
                 .id(itemDto.getId())

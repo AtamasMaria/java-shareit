@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull;
 @Data
 @Builder
 public class Item {
-
     private int id;
     @NotNull
     @NotEmpty

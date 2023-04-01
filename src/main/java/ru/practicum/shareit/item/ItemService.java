@@ -20,16 +20,13 @@ public class ItemService {
         userService.checkUserId(item.getOwner());
         return ItemMapper.toItemDto(itemStorage.create(item));
     }
-
     public ItemDto getItemById(int id) {
         return ItemMapper.toItemDto(itemStorage.get(id));
     }
-
     public Collection<ItemDto> getAllByOwnerId(int ownerId) {
         return itemStorage.getAllByOwnerId(ownerId).stream()
                 .map(ItemMapper::toItemDto).collect(Collectors.toList());
     }
-
     public ItemDto update(ItemDto newItem, int id, int owner) {
         Item item = itemStorage.get(id);
         if (item.getOwner() != owner)
@@ -42,7 +39,6 @@ public class ItemService {
             item.setDescription(newItem.getDescription());
         return ItemMapper.toItemDto(itemStorage.update(item));
     }
-
     public Collection<ItemDto> search(String text) {
         return itemStorage.search(text).stream()
                 .map(ItemMapper::toItemDto)

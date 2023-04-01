@@ -16,25 +16,21 @@ public class ItemStorageImpl implements ItemStorage {
         items.put(item.getId(), item);
         return item;
     }
-
     @Override
     public Item get(int id) {
         return items.get(id);
     }
-
     @Override
     public Collection<Item> getAllByOwnerId(int ownerId) {
         return items.values().stream()
                 .filter(item -> item.getOwner() == ownerId)
                 .collect(Collectors.toList());
     }
-
     @Override
     public Item update(Item item) {
         items.put(item.getId(), item);
         return item;
     }
-
     @Override
     public Collection<Item> search(String text) {
         if (text.equals(""))
