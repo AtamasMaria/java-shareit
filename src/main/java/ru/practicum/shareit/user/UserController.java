@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
+
     private final UserService userService;
 
     @PostMapping
@@ -20,21 +21,25 @@ public class UserController {
         log.debug("POST-запрос на создание нового пользователя.");
         return userService.create(userDto);
     }
+
     @GetMapping("/{userId}")
     public UserDto getUserById(@PathVariable Long userId) {
         log.debug("GET-запрос на вывод пользователя по идентификатору.");
         return userService.getUserById(userId);
     }
+
     @GetMapping
     public List<UserDto> getAllUsers() {
         log.debug("GET-запрос на вывод всех пользователей.");
         return userService.getAll();
     }
+
     @PatchMapping("/{userId}")
     public UserDto updateUser(@PathVariable Long userId, @RequestBody UserDto userDto) {
         log.debug("PATCH-запрос на обновление пользователя.");
         return userService.update(userId, userDto);
     }
+
     @DeleteMapping("/{userId}")
     public void deleteUserById(@PathVariable Long userId) {
         log.debug("DELETE-запрос на удаление пользователя.");

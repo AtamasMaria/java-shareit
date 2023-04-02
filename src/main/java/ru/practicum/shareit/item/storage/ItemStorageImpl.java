@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Repository
 public class ItemStorageImpl implements ItemStorage {
+
     private final List<Item> items = new ArrayList<>();
     private Long nextId = 1L;
 
@@ -23,18 +24,21 @@ public class ItemStorageImpl implements ItemStorage {
         items.add(item);
         return item;
     }
+
     @Override
     public Optional<Item> get(Long itemId) {
         return items.stream()
                 .filter(item -> itemId.equals(item.getId()))
                 .findFirst();
     }
+
     @Override
     public List<Item> getAll(Long userId) {
         return items.stream()
                 .filter(item -> userId.equals(item.getOwner().getId()))
                 .collect(Collectors.toList());
     }
+
     @Override
     public List<Item> search(String text) {
         return items.stream()
@@ -45,6 +49,7 @@ public class ItemStorageImpl implements ItemStorage {
                 )
                 .collect(Collectors.toList());
     }
+
     @Override
     public Item update(Long userId, Long itemId, Item item) {
         Item oldItem = get(itemId).orElseThrow(
@@ -64,12 +69,14 @@ public class ItemStorageImpl implements ItemStorage {
         }
         return oldItem;
     }
+
     @Override
     public void delete(Long itemId) {
         items.remove(get(itemId).orElseThrow(
                 () -> new NotFoundException("Вещь с таким идентификатором не была найдена.")
         ));
     }
+
     @Override
     public boolean checkItemId(Long itemId) {
         return items.stream().anyMatch(item -> itemId.equals(item.getId()));

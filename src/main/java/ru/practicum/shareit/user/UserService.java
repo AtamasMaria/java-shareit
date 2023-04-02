@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
+
     private final UserStorage userStorage;
 
     public UserDto create(UserDto userDto) {
@@ -28,6 +29,7 @@ public class UserService {
         user = userStorage.create(user);
         return UserMapper.toUserDto(user);
     }
+
     public UserDto getUserById(Long id) {
 
         User user = userStorage.get(id).orElseThrow(
@@ -35,11 +37,13 @@ public class UserService {
         );
         return UserMapper.toUserDto(user);
     }
+
     public List<UserDto> getAll() {
         return userStorage.getAll().stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
     }
+
     public UserDto update(Long userId, UserDto userDto) {
         User newUser = UserMapper.toUser(userDto);
 
@@ -59,6 +63,7 @@ public class UserService {
         }
         return UserMapper.toUserDto(userStorage.update(userId, oldUser));
     }
+
     public void deleteUserById(Long userId) {
         if (!userStorage.checkUserId(userId)) {
             throw new NotFoundException("Пользователь с таким идентификатором не был найден.");

@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public class UserStorageImpl implements UserStorage {
+
     private final HashMap<Long, User> users = new HashMap<>();
     private Long id = 0L;
 
@@ -21,28 +22,34 @@ public class UserStorageImpl implements UserStorage {
         users.put(user.getId(), user);
         return user;
     }
+
     @Override
     public Optional<User> get(Long userId) {
         return users.values().stream().filter(user -> userId.equals(user.getId())).findFirst();
     }
+
     @Override
     public List<User> getAll() {
         return new ArrayList<>(users.values());
     }
+
     @Override
     public User update(Long userId, User user) {
         users.replace(userId, user);
         user.setId(userId);
         return user;
     }
+
     @Override
     public void delete(Long userId) {
         users.remove(userId);
     }
+
     @Override
     public boolean checkUserId(Long userId) {
         return users.containsKey(userId);
     }
+
     @Override
     public Optional<User> findUserByEmail(String email) {
         return users.values().stream()

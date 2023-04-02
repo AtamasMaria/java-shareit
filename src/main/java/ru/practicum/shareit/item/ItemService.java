@@ -17,8 +17,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class ItemService {
+
     private final ItemStorage itemStorage;
     private final UserService userService;
+
     public ItemDto create(Long userId, ItemDto itemDto) {
         Item item = ItemMapper.toItem(itemDto);
         item.setOwner(UserMapper.toUser(userService.getUserById(userId)));
@@ -27,6 +29,7 @@ public class ItemService {
         }
         return ItemMapper.toItemDto(itemStorage.create(userId, item));
     }
+
     public ItemDto get(Long userId, Long itemId) {
         if (!itemStorage.checkItemId(itemId)) {
             throw new NotFoundException("Вещь с таким идентификатором не была найдена.");
@@ -37,11 +40,13 @@ public class ItemService {
         log.debug("ItemService: Item {} returned.", item);
         return ItemMapper.toItemDto(item);
     }
+
     public List<ItemDto> getAll(Long userId) {
         return itemStorage.getAll(userId).stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
     }
+
     public ItemDto update(Long userId, Long itemId, ItemDto itemDto) {
         Item item = ItemMapper.toItem(itemDto);
         item.setOwner(UserMapper.toUser(userService.getUserById(userId)));
@@ -50,12 +55,14 @@ public class ItemService {
         }
         return ItemMapper.toItemDto(itemStorage.update(userId, itemId, item));
     }
+
     public void delete(Long userId, Long itemId) {
         if (!itemStorage.checkItemId(itemId)) {
             throw new NotFoundException("Вещь с таким идентификатором не была найдена.");
         }
         itemStorage.delete(itemId);
     }
+    
     public List<Item> search(String text) {
 
         if (text != null && !text.isBlank()) {

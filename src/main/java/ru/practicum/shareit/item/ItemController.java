@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class ItemController {
+
     private final ItemService itemService;
 
     @PostMapping
@@ -23,16 +24,19 @@ public class ItemController {
         log.debug("POST-запрос на создание новой вещи.");
         return itemService.create(userId, itemDto);
     }
+
     @GetMapping("/{itemId}")
     public ItemDto getItemById(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long itemId) {
         log.debug("GET-запрос на получение вещи по идентификатору.");
         return itemService.get(userId, itemId);
     }
+
     @GetMapping
     public List<ItemDto> getAllItems(@RequestHeader("X-Sharer-User-Id") Long userId) {
         log.debug("GET-запрос на получение всех вещей пользователя по идентификатору.");
         return itemService.getAll(userId);
     }
+
     @PatchMapping("/{itemId}")
     public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long itemId,
                               @RequestBody ItemDto itemDto) {
@@ -41,11 +45,13 @@ public class ItemController {
 
         return itemService.update(userId, itemId, itemDto);
     }
+
     @DeleteMapping("/{itemId}")
     public void deleteItem(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long itemId) {
         log.debug("DELETE-запрос на удаление вещи.");
         itemService.delete(userId, itemId);
     }
+
     @GetMapping("/search")
     public List<ItemDto> searchItemByParams(@RequestParam String text) {
         log.debug("GET-запрос на поиск вещей.", text);
