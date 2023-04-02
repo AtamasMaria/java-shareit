@@ -62,9 +62,8 @@ public class ItemService {
         }
         itemStorage.delete(itemId);
     }
-    
-    public List<Item> search(String text) {
 
+    public List<Item> search(String text) {
         if (text != null && !text.isBlank()) {
             List<Item> searchedItems = itemStorage.search(text.toLowerCase());
             return searchedItems;
