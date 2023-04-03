@@ -1,8 +1,11 @@
-package ru.practicum.shareit.item;
+package ru.practicum.shareit.item.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.mapper.ItemMapper;
+import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -28,7 +31,7 @@ public class ItemController {
     @GetMapping("/{itemId}")
     public ItemDto getItemById(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long itemId) {
         log.debug("GET-запрос на получение вещи по идентификатору.");
-        return itemService.get(userId, itemId);
+        return itemService.get(itemId);
     }
 
     @GetMapping

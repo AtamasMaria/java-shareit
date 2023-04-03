@@ -3,7 +3,7 @@ package ru.practicum.shareit.item.storage;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.OperationAccessException;
-import ru.practicum.shareit.item.Item;
+import ru.practicum.shareit.item.model.Item;
 
 import java.util.ArrayList;
 import java.util.List;

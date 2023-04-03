@@ -1,16 +1,21 @@
-package ru.practicum.shareit.item;
+package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.AlreadyExistsException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exception.OperationAccessException;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.mapper.ItemMapper;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.ItemStorage;
-import ru.practicum.shareit.user.UserMapper;
-import ru.practicum.shareit.user.UserService;
+import ru.practicum.shareit.user.mapper.UserMapper;
+import ru.practicum.shareit.user.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,7 +35,7 @@ public class ItemService {
         return ItemMapper.toItemDto(itemStorage.create(userId, item));
     }
 
-    public ItemDto get(Long userId, Long itemId) {
+    public ItemDto get(Long itemId) {
         if (!itemStorage.checkItemId(itemId)) {
             throw new NotFoundException("Вещь с таким идентификатором не была найдена.");
         }
@@ -57,8 +62,9 @@ public class ItemService {
     }
 
     public void delete(Long userId, Long itemId) {
-        if (!itemStorage.checkItemId(itemId)) {
-            throw new NotFoundException("Вещь с таким идентификатором не была найдена.");
+        Item deleteItem = ItemMapper.toItem(get(itemId));
+        if (!userId.equals(deleteItem.getOwner().getId())) {
+            throw new OperationAccessException("Пользователю с этим идентификатором недоступно удаление этой вещи.");
         }
         itemStorage.delete(itemId);
     }
