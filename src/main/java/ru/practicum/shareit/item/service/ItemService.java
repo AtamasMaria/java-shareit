@@ -46,7 +46,7 @@ public class ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException(String.format("Вещь с id = %d не найдена.", itemId)));
         result = ItemMapper.toItemDto(item);
-        if (item.getOwnerId() == userId) {
+        if (item.getOwnerId().equals(userId)) {
             updateBookings(result);
         }
         List<Comment> comments = commentRepository.findAllByItemId(result.getId());
