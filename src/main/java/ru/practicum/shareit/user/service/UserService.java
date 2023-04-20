@@ -28,7 +28,7 @@ public class UserService {
     @Transactional
     public UserDto findUserById(Long userId) {
         return toUserDto(userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(String.format("Пользователь c id = %d не найден.", userId))));
+                .orElseThrow(() -> new NotFoundException(String.format("User with id = %d not found.", userId))));
     }
 
     @Transactional

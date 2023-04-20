@@ -44,7 +44,7 @@ public class ItemService {
     public ItemDto findItemById(Long itemId, Long userId) {
         ItemDto result;
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new NotFoundException(String.format("Вещь с id = %d не найдена.", itemId)));
+                .orElseThrow(() -> new NotFoundException(String.format("Item с id = %d не найден.", itemId)));
         result = ItemMapper.toItemDto(item);
         if (Objects.equals(item.getOwnerId(), userId)) {
             updateBookings(result);
@@ -57,10 +57,10 @@ public class ItemService {
     @Transactional
     public ItemDto update(ItemDto itemDto, Long itemId, Long userId) {
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new NotFoundException(String.format("Вещь с id = %d не найдена.", itemId)));
+                .orElseThrow(() -> new NotFoundException(String.format("Item with id = %d not found.", itemId)));
         userService.findUserById(userId);
         if (!item.getOwnerId().equals(userId)) {
-            throw new OperationAccessException("Операция доступна только владельцу.");
+            throw new OperationAccessException(String.format("User with id = %d is not the owner, update is not available.", userId));
         }
         if (itemDto.getName() != null) {
             item.setName(itemDto.getName());
@@ -122,14 +122,14 @@ public class ItemService {
     @Transactional
     public Long findOwnerId(Long itemId) {
         return itemRepository.findById(itemId)
-                .orElseThrow(() -> new NotFoundException(String.format("Вещь с id = %d не найдена.", itemId)))
+                .orElseThrow(() -> new NotFoundException(String.format("Item with id = %d not found.", itemId)))
                 .getOwnerId();
     }
 
     @Transactional
     public CommentDto addComment(Long itemId, Long userId, CommentDto commentDto) {
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new NotFoundException(String.format("Вещь с id = %d не найдена.", itemId)));
+                .orElseThrow(() -> new NotFoundException(String.format("Item with id = %d not found.", itemId)));
         User user = UserMapper.toUser(userService.findUserById(userId));
 
         List<Booking> bookings = bookingRepository
@@ -142,7 +142,7 @@ public class ItemService {
             comment.setCreated(LocalDateTime.now());
             return CommentMapper.toDto(commentRepository.save(comment));
         } else {
-            throw new BadRequestException("У пользователя нет завершенных бронирований.");
+            throw new NotAvailableException(String.format("Booking for User with id = %d and Item with id = %d not found.", userId, itemId));
         }
     }
 }

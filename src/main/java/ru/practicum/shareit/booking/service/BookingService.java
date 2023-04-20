@@ -32,13 +32,13 @@ public class BookingService {
         if (bookingDtoShort.getEnd().isBefore(bookingDtoShort.getStart()) ||
                 bookingDtoShort.getEnd().equals(bookingDtoShort.getStart())) {
             throw new TimeDataException(String
-                    .format("недопустимое время бронирования start = %s  end = %s",
+                    .format("Invalid booking time start = %s  end = %s",
                             bookingDtoShort.getStart(), bookingDtoShort.getEnd()));
         }
         User booker = UserMapper.toUser(userService.findUserById(bookerId));
         Item item = ItemMapper.toItem(itemService.findItemById(bookingDtoShort.getItemId(), bookerId));
         if (itemService.findOwnerId(item.getId()) == bookerId) {
-            throw new OperationAccessException("Владелец не может арендовать свою же вещь.");
+            throw new OperationAccessException("The owner cannot be a booker.");
         }
         if (item.getAvailable()) {
             Booking booking = Booking.builder()
@@ -50,8 +50,7 @@ public class BookingService {
                     .build();
             return BookingMapper.toBookingDto(bookingRepository.save(booking));
         } else {
-            throw new NotAvailableException(String.format("%s с id = %d не доступно для бронирования.",
-                    item.getName(), item.getId()));
+            throw new NotAvailableException("Item with id = %d is not available.");
         }
     }
 
@@ -62,7 +61,7 @@ public class BookingService {
         if (booking.getBooker().getId().equals(userId) || booking.getItem().getOwnerId().equals(userId)) {
             return BookingMapper.toBookingDto(booking);
         } else {
-            throw new OperationAccessException("Пользователь не имеет доступа к брони");
+            throw new OperationAccessException(String.format("User with id = %d is not the owner, no access to booking.", userId));
         }
     }
 
@@ -123,10 +122,10 @@ public class BookingService {
 
         if (itemService.findOwnerId(booking.getItem().getId()).equals(userId)
                 && booking.getStatus().equals(BookingStatus.APPROVED)) {
-            throw new AlreadyExistsException("Статус бронирования вещи уже был подтвержден");
+            throw new AlreadyExistsException("The booking decision has already been made.");
         }
         if (!itemService.findOwnerId(booking.getItem().getId()).equals(userId)) {
-            throw new OperationAccessException("подтвержать и отклонять статус бронирования может только владелец вещи");
+            throw new OperationAccessException(String.format("User with id = %d is not the owner, no access to booking.", userId));
         }
         if (approve) {
             booking.setStatus(BookingStatus.APPROVED);
