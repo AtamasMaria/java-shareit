@@ -23,56 +23,65 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleValidationException(ValidationException e) {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorMessage handleValidationException(ValidationException e) {
         log.warn("400 {}", e.getMessage(), e);
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return ErrorMessage.builder().error(e.getMessage()).build();
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleNotAvailableException(NotAvailableException e) {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorMessage handleNotAvailableException(NotAvailableException e) {
         log.warn("400 {}", e.getMessage());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return ErrorMessage.builder().error(e.getMessage()).build();
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleDuplicateEmail(final ConstraintViolationException e) {
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorMessage handleDuplicateEmail(final ConstraintViolationException e) {
         log.warn("409 {}", e.getMessage());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        return ErrorMessage.builder().error(e.getMessage()).build();
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleUnknownDataException(NotFoundException e) {
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorMessage handleUnknownDataException(NotFoundException e) {
         log.warn("404 {}", e.getMessage());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        return ErrorMessage.builder().error(e.getMessage()).build();
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handlerAccessException(final OperationAccessException e) {
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorMessage handlerAccessException(final OperationAccessException e) {
         log.warn("404 {}", e.getMessage());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        return ErrorMessage.builder().error(e.getMessage()).build();
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleThrowable(final Exception e) {
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorMessage handleThrowable(final Exception e) {
         log.warn("500 {}", e.getMessage());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return ErrorMessage.builder().error(e.getMessage()).build();
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleUnknownDataException(MethodArgumentNotValidException e) {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorMessage handleUnknownDataException(MethodArgumentNotValidException e) {
         log.warn("400 {}", e.getMessage());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return ErrorMessage.builder().error(e.getMessage()).build();
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleUnknownDataException(TimeDataException e) {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorMessage handleUnknownDataException(TimeDataException e) {
         log.warn("400 {}", e.getMessage());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return ErrorMessage.builder().error(e.getMessage()).build();
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleThrowable(Throwable throwable) {
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorMessage handleThrowable(Throwable throwable) {
         log.error("Unknown error", throwable);
-        return new ResponseEntity<>(throwable.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return ErrorMessage.builder().error(throwable.getMessage()).build();
     }
 }
