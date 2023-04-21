@@ -1,8 +1,11 @@
 package ru.practicum.shareit.item.model;
 
 import lombok.*;
+import ru.practicum.shareit.booking.dto.ShortItemBookingDto;
+import ru.practicum.shareit.item.comment.dto.CommentDto;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "items")
@@ -22,5 +25,11 @@ public class Item {
     private Boolean available;
     @Column(name = "owner_id", nullable = false)
     private Long ownerId;
+    @Transient
+    private ShortItemBookingDto lastBooking;
+    @Transient
+    private ShortItemBookingDto nextBooking;
+    @Transient
+    private List<CommentDto> comments;
 
 }

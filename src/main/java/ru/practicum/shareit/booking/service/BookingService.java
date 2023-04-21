@@ -119,12 +119,12 @@ public class BookingService {
     @Transactional
     public OutputBookingDto approve(long bookingId, long userId, Boolean approve) {
         OutputBookingDto booking = findBookingById(bookingId, userId);
-
-        if (itemService.findOwnerId(booking.getItem().getId()).equals(userId)
+        Long ownerId = itemService.findOwnerId(booking.getItem().getId());
+        if (ownerId.equals(userId)
                 && booking.getStatus().equals(BookingStatus.APPROVED)) {
             throw new AlreadyExistsException("The booking decision has already been made.");
         }
-        if (!itemService.findOwnerId(booking.getItem().getId()).equals(userId)) {
+        if (!ownerId.equals(userId)) {
             throw new OperationAccessException(String.format("User with id = %d is not the owner, no access to booking.", userId));
         }
         if (approve) {
@@ -136,5 +136,4 @@ public class BookingService {
         }
         return booking;
     }
-
 }

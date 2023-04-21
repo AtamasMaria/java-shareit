@@ -1,10 +1,12 @@
 package ru.practicum.shareit.item.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.model.*;
 import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exception.*;
 import ru.practicum.shareit.item.comment.dto.CommentDto;
 import ru.practicum.shareit.item.comment.model.Comment;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ItemService {
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
@@ -55,6 +58,17 @@ public class ItemService {
     }
 
     @Transactional
+    public List<ItemDto> findAllUsersItems(Long userId) {
+        List<ItemDto> item = itemRepository.findAllByOwnerId(userId).stream()
+                .map(ItemMapper::toItemDto)
+                .collect(Collectors.toList());
+        return item.stream()
+                .map(this::updateBookings)
+                .peek((i) -> CommentMapper.toDtoList(commentRepository.findAllByItemId(i.getId())))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
     public ItemDto update(ItemDto itemDto, Long itemId, Long userId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException(String.format("Item with id = %d not found.", itemId)));
@@ -72,16 +86,6 @@ public class ItemService {
             item.setAvailable(itemDto.getAvailable());
         }
         return ItemMapper.toItemDto(itemRepository.save(item));
-    }
-
-    @Transactional
-    public List<ItemDto> findAllUsersItems(Long userId) {
-        List<ItemDto> item = itemRepository.findAllByOwnerId(userId).stream()
-                .map(ItemMapper::toItemDto)
-                .collect(Collectors.toList());
-        return item.stream()
-                .map(this::updateBookings)
-                .collect(Collectors.toList());
     }
 
     public ItemDto updateBookings(ItemDto itemDto) {
@@ -131,10 +135,9 @@ public class ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException(String.format("Item with id = %d not found.", itemId)));
         User user = UserMapper.toUser(userService.findUserById(userId));
-
         List<Booking> bookings = bookingRepository
                 .findAllByItemIdAndBookerIdAndStatusIsAndEndIsBefore(itemId, userId, BookingStatus.APPROVED, LocalDateTime.now());
-        System.out.println(bookings);
+        log.info(bookings.toString());
         if (!bookings.isEmpty() && bookings.get(0).getStart().isBefore(LocalDateTime.now())) {
             Comment comment = CommentMapper.toComment(commentDto);
             comment.setItem(item);
