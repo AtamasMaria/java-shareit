@@ -23,7 +23,7 @@ public class ItemRequestMapper {
                 .build();
     }
 
-    public static ItemRequest toItemRequest (ItemRequestDto requestDto) {
+    public static ItemRequest toItemRequest(ItemRequestDto requestDto) {
         return ItemRequest.builder()
                 .id(requestDto.getId())
                 .description(requestDto.getDescription())
