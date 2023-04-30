@@ -29,7 +29,7 @@ public class ItemRequestService {
         ItemRequest itemRequest = ItemRequest.builder()
                 .description(itemRequestDto.getDescription())
                 .requester(UserMapper.toUser(userService.findUserById(userId)))
-                //.created(LocalDateTime.now())
+                .created(LocalDateTime.now())
                 .build();
         return ItemRequestMapper.toItemRequestDto(requestRepository.save(itemRequest));
     }
