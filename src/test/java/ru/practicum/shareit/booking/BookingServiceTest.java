@@ -6,8 +6,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.practicum.shareit.booking.dto.*;
-import ru.practicum.shareit.booking.model.*;
+import ru.practicum.shareit.booking.dto.InputBookingDto;
+import ru.practicum.shareit.booking.dto.OutputBookingDto;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exception.*;
@@ -21,7 +23,8 @@ import ru.practicum.shareit.user.service.UserService;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 
 @ExtendWith(MockitoExtension.class)
@@ -55,6 +58,12 @@ public class BookingServiceTest {
             .description("Description")
             .available(true)
             .ownerId(1L)
+            .build();
+
+    private final OutputBookingDto outputBookingDto = OutputBookingDto.builder()
+            .start(LocalDateTime.now())
+            .end(LocalDateTime.now().plusHours(1L))
+            .item(itemDto)
             .build();
     private final Booking booking = Booking.builder()
             .booker(user)

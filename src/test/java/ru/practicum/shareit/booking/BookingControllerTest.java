@@ -12,6 +12,7 @@ import ru.practicum.shareit.booking.controller.BookingController;
 import ru.practicum.shareit.booking.dto.InputBookingDto;
 import ru.practicum.shareit.booking.dto.OutputBookingDto;
 import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.time.LocalDateTime;
@@ -71,7 +72,8 @@ public class BookingControllerTest {
         InputBookingDto badInputBookingDto = InputBookingDto.builder()
                 .start(LocalDateTime.of(1000, 05, 10, 13, 00, 00))
                 .end(LocalDateTime.of(2023, 05, 20, 13, 00, 00))
-                .itemId(1L).build();
+                .itemId(1L)
+                .build();
 
         mvc.perform(post("/bookings")
                         .header("X-Sharer-User-Id", 1L)
@@ -83,6 +85,21 @@ public class BookingControllerTest {
                 .getContentAsString();
 
         verify(bookingService, never()).create(badInputBookingDto, 1L);
+    }
+
+    @Test
+    void createBooking_whenUserIsNotOwner_thenReturnedStatusIsNotFound() throws Exception {
+        Mockito.when(bookingService.create(any(), anyLong()))
+                .thenThrow(new NotFoundException(String.format("User with id = %d not found.", 100L)));
+
+        mvc.perform(post("/bookings")
+                        .header("X-Sharer-User-Id", 100L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(inputBookingDto)))
+                .andExpect(status().isNotFound())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
     }
 
     @Test
@@ -100,6 +117,21 @@ public class BookingControllerTest {
                 .getContentAsString();
 
         verify(bookingService).findBookingById(1L, 1L);
+    }
+
+    @Test
+    void findBookingById_whenBookingIdNotFound_thenReturnedStatusIsNotFound() throws Exception {
+        Mockito.when(bookingService.findBookingById(anyLong(), anyLong()))
+                .thenThrow(new NotFoundException(String.format("Booking with id = %d not found.", 100L)));
+
+        mvc.perform(get("/bookings/{bookingId}", 100L)
+                        .header("X-Sharer-User-Id", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(inputBookingDto)))
+                .andExpect(status().isNotFound())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
     }
 
     @Test
