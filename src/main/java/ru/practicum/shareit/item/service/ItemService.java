@@ -59,7 +59,7 @@ public class ItemService {
     public ItemDto findItemById(Long itemId, Long userId) {
         ItemDto result;
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new NotFoundException(String.format("Item с id = %d не найден.", itemId)));
+                .orElseThrow(() -> new NotFoundException(String.format("Item with id = %d not found.", itemId)));
         result = ItemMapper.toItemDto(item);
         if (Objects.equals(item.getOwnerId(), userId)) {
             updateBookings(result);

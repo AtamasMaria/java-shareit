@@ -59,7 +59,7 @@ public class BookingService {
     @Transactional
     public OutputBookingDto findBookingById(Long bookingId, Long userId) {
         Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new NotFoundException(String.format("Booking по id = %d не найден", bookingId)));
+                .orElseThrow(() -> new NotFoundException(String.format("Booking with id = %d not found.", bookingId)));
         if (booking.getBooker().getId().equals(userId) || booking.getItem().getOwnerId().equals(userId)) {
             return BookingMapper.toBookingDto(booking);
         } else {

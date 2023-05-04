@@ -39,7 +39,7 @@ public class ItemRequestController {
     }
 
     @GetMapping
-    public List<ItemRequestDto> getAllUserRequests(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public List<ItemRequestDto> findAllUserRequests(@RequestHeader("X-Sharer-User-Id") Long userId) {
         return requestService.findAllUserRequests(userId);
     }
 }
