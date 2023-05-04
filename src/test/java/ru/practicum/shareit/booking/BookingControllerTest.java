@@ -146,6 +146,5 @@ public class BookingControllerTest {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-        
     }
 }
