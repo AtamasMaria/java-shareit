@@ -17,13 +17,13 @@ import ru.practicum.shareit.item.comment.repository.CommentRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.item.service.ItemServiceImpl;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
-import ru.practicum.shareit.request.service.ItemRequestService;
+import ru.practicum.shareit.request.service.ItemRequestServiceImpl;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.user.service.UserServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,17 +39,17 @@ import static org.mockito.ArgumentMatchers.*;
 @ExtendWith(MockitoExtension.class)
 public class ItemServiceTest {
     @InjectMocks
-    private ItemService itemService;
+    private ItemServiceImpl itemService;
     @Mock
     private ItemRepository itemRepository;
     @Mock
     private BookingRepository bookingRepository;
     @Mock
-    private UserService userService;
+    private UserServiceImpl userService;
     @Mock
     private CommentRepository commentRepository;
     @Mock
-    private ItemRequestService requestService;
+    private ItemRequestServiceImpl requestService;
 
     private final User user = new User(1L, "User", "user@email.com");
     private final UserDto userDto = new UserDto(1L, "User", "user@email.com");

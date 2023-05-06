@@ -11,10 +11,10 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.repository.ItemRequestRepository;
-import ru.practicum.shareit.request.service.ItemRequestService;
+import ru.practicum.shareit.request.service.ItemRequestServiceImpl;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.user.service.UserServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +28,11 @@ import static org.mockito.ArgumentMatchers.anyLong;
 @ExtendWith(MockitoExtension.class)
 public class ItemRequestServiceTest {
     @InjectMocks
-    private ItemRequestService requestService;
+    private ItemRequestServiceImpl requestService;
     @Mock
     private ItemRequestRepository requestRepository;
     @Mock
-    private UserService userService;
+    private UserServiceImpl userService;
     @Mock
     private ItemRepository itemRepository;
     private final User user = new User(1L, "User", "user@email.com");
@@ -81,13 +81,13 @@ public class ItemRequestServiceTest {
     }
 
     @Test
-    void  findById_whenRequestIsNotExist_thenReturnedNotFoundException() {
+    void findById_whenRequestIsNotExist_thenReturnedNotFoundException() {
         Mockito.when(requestRepository.findById(anyLong()))
                 .thenThrow(new NotFoundException(String.format("Request with id = %d not found.", 1L)));
 
         Exception e = assertThrows(NotFoundException.class,
                 () -> requestService.findById(1L, 1L));
-        assertEquals(e.getMessage(),  String.format("Request with id = %d not found.", 1L));
+        assertEquals(e.getMessage(), String.format("Request with id = %d not found.", 1L));
     }
 
     @Test
@@ -108,7 +108,7 @@ public class ItemRequestServiceTest {
 
         Exception e = assertThrows(NotFoundException.class,
                 () -> requestService.findAllRequests(1L, 1, 1));
-        assertEquals(e.getMessage(),String.format("User with id = %d not found.", 1L));
+        assertEquals(e.getMessage(), String.format("User with id = %d not found.", 1L));
     }
 
 
