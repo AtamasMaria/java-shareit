@@ -24,7 +24,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class BookingServiceImpl implements BookingService{
+public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final UserServiceImpl userService;
     private final ItemServiceImpl itemService;
