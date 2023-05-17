@@ -38,7 +38,7 @@ public class ItemController {
 
     @GetMapping
     public ResponseEntity<Object> getAllUsersItems(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                                   @RequestParam(value = "from", defaultValue = "0")  Integer from,
+                                                   @RequestParam(value = "from", defaultValue = "0") Integer from,
                                                    @RequestParam(value = "size", defaultValue = "10") Integer size) {
         return itemClient.getAllUsersItems(userId, from, size);
     }
