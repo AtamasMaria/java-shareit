@@ -17,6 +17,7 @@ import java.util.List;
 @RequestMapping("/bookings")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class BookingController {
     private final BookingService bookingService;
 
@@ -48,7 +49,7 @@ public class BookingController {
                                                    @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
                                                    @Positive @RequestParam(defaultValue = "10") Integer size) {
         log.debug("GET-запрос на получение бронирований владельца по идентификатору владельца.");
-        return bookingService.findAllBookingsByOwner(state, userId, from, size);
+        return bookingService.findAllBookingsByOwner(state, userId,  from, size);
     }
 
     @PatchMapping("/{bookingId}")
