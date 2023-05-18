@@ -24,7 +24,7 @@ services:
     image: postgres
     container_name: db
     ports:
-      - "6541:5432"
+      - "8081:5432"
     environment:
       - POSTGRES_DB=shareit
       - POSTGRES_USER=root
