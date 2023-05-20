@@ -75,7 +75,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public List<ItemDto> findAllUsersItems(Long userId, Integer from, Integer size) {
-        Pageable page = PageRequest.of(from / size, size);
+        Sort sort = Sort.by(Sort.Direction.ASC, "id");
+        Pageable page = PageRequest.of(from / size, size, sort);
         List<ItemDto> item = itemRepository.findAllByOwnerId(userId, page).stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
