@@ -74,8 +74,7 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     public List<OutputBookingDto> findAllBookingsByUser(String state, Long userId, Integer from, Integer size) {
         userService.findUserById(userId);
-        Sort sort = Sort.by(Sort.Direction.DESC, "start");
-        Pageable page = PageRequest.of(from / size, size, sort);
+        Pageable page = PageRequest.of(from / size, size);
         LocalDateTime now = LocalDateTime.now();
         switch (state) {
             case "ALL":

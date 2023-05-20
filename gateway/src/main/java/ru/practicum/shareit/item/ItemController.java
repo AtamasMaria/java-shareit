@@ -27,13 +27,13 @@ public class ItemController {
     public ResponseEntity<Object> updateItem(@RequestHeader("X-Sharer-User-Id") Long userId,
                                              @RequestBody ItemDto itemDto,
                                              @PathVariable Long itemId) {
-        return itemClient.updateItem(itemDto, userId, itemId);
+        return itemClient.updateItem(itemDto, itemId, userId);
     }
 
     @GetMapping("{itemId}")
     public ResponseEntity<Object> getItemByItemId(@RequestHeader("X-Sharer-User-Id") Long userId,
                                                   @PathVariable Long itemId) {
-        return itemClient.getItemById(userId, itemId);
+        return itemClient.getItemById(itemId, userId);
     }
 
     @GetMapping
