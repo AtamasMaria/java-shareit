@@ -44,7 +44,7 @@ public class ItemClient extends BaseClient {
                 "from", from,
                 "size", size
         );
-        return get("?from={from}&size={size}", userId, parameters);
+        return get("", userId, parameters);
     }
 
     public ResponseEntity<Object> searchItems(Long userId, String text, Integer from, Integer size) {
