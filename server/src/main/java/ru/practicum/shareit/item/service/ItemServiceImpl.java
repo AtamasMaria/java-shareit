@@ -81,7 +81,7 @@ public class ItemServiceImpl implements ItemService {
                 .collect(Collectors.toList());
         return item.stream()
                 .map(this::updateBookings)
-                .peek((i) -> CommentMapper.toDtoList(commentRepository.findAllByItemId(i.getId())))
+                .peek((i) -> CommentMapper.toDtoList(commentRepository.findAllByItemIdOrderByCreated(i.getId())))
                 .collect(Collectors.toList());
     }
 
