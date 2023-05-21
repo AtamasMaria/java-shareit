@@ -2,13 +2,11 @@ package ru.practicum.shareit.booking.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.InputBookingDto;
 import ru.practicum.shareit.booking.dto.OutputBookingDto;
 import ru.practicum.shareit.booking.service.BookingService;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
@@ -17,13 +15,12 @@ import java.util.List;
 @RequestMapping("/bookings")
 @RequiredArgsConstructor
 @Slf4j
-@Validated
 public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
     public OutputBookingDto create(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                   @Valid @RequestBody InputBookingDto bookingDtoShort) {
+                                   @RequestBody InputBookingDto bookingDtoShort) {
         log.debug("POST-запрос на добавление нового бронирования.");
         return bookingService.create(bookingDtoShort, userId);
     }
